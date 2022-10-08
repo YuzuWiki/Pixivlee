@@ -36,9 +36,10 @@ func newClient(sessionId string) (common.IClient, error) {
 }
 
 type pixivPool struct {
-	p map[string]common.IClient
-
 	m sync.Mutex
+
+	p     map[string]common.IClient
+	proxy string
 }
 
 func (s *pixivPool) Get(sessionId string) (common.IClient, error) {
@@ -64,6 +65,12 @@ func (s *pixivPool) Get(sessionId string) (common.IClient, error) {
 		return nil, err
 	}
 
+	if len(s.proxy) > 0 {
+		if err = c.SetProxy(s.proxy); err != nil {
+			return nil, err
+		}
+	}
+
 	s.p[sessionId] = c
 	return c, nil
 }
@@ -75,10 +82,19 @@ func (s *pixivPool) Del(sessionId string) {
 	delete(s.p, sessionId)
 }
 
+func (s *pixivPool) SetProxy(u string) {
+	s.proxy = u
+}
+
 func newPool() common.IPool {
-	return &pixivPool{p: map[string]common.IClient{}}
+	return &pixivPool{
+		p: map[string]common.IClient{}}
 }
 
 func Pool() common.IPool {
 	return pool
+}
+
+func SetGlobalProxy(url string) {
+	pool.SetProxy(url)
 }
