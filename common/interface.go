@@ -51,4 +51,6 @@ type IContext interface {
 type IPool interface {
 	Get(string) (IClient, error)
 	Del(string)
+
+	SetProxy(string)
 }
