@@ -1,100 +1,66 @@
 package Pixivlee
 
 import (
-	"net/http"
+	"strconv"
 	"strings"
-	"sync"
-
-	"github.com/YuzuWiki/Pixivlee/common"
-	"github.com/YuzuWiki/Pixivlee/requests"
+	"time"
 )
 
-func newClient(sessionId string) (common.IClient, error) {
-	c := requests.NewRequest()
+type Pixiver struct {
+	pid       TPid
+	sessionID string
 
-	// set default header
-	c.SetHeader(
-		common.HeaderOption{Key: "User-Agent", Value: common.UserAgent},
-		common.HeaderOption{Key: "referer", Value: "https://" + common.PixivHost},
-	)
-
-	// set cookie
-	if len(sessionId) > 0 {
-		if err := c.SetCookies(
-			common.PixivHost,
-			&http.Cookie{
-				Name:   common.Phpsessid,
-				Value:  sessionId,
-				Path:   "/",
-				Domain: common.PixivDomain,
-			},
-		); err != nil {
-			return nil, err
-		}
-	}
-	return c, nil
+	state   int
+	limitAt int
 }
 
-type pixivPool struct {
-	m sync.Mutex
-
-	p     map[string]common.IClient
-	proxy string
-}
-
-func (s *pixivPool) Get(sessionId string) (common.IClient, error) {
-	var (
-		isOk bool
-		c    common.IClient
-		err  error
-	)
-
-	sessionId = strings.TrimSpace(sessionId)
-	if c, isOk = s.p[sessionId]; isOk {
-		return c, nil
+func (p *Pixiver) Pid() TPid {
+	if p.pid > 0 {
+		return p.pid
 	}
 
-	s.m.Lock()
-	defer s.m.Unlock()
-
-	if c, isOk = s.p[sessionId]; isOk {
-		return c, nil
+	if arr := strings.SplitN(p.sessionID, "_", 2); len(arr) == 2 {
+		pid, _ := strconv.ParseUint(arr[0], 10, 64)
+		return TPid(pid)
 	}
 
-	if c, err = newClient(sessionId); err != nil {
-		return nil, err
+	return 0
+}
+
+func (p *Pixiver) SessionID() string {
+	return p.sessionID
+}
+
+func (p *Pixiver) State() int {
+	return p.state
+}
+
+func (p *Pixiver) SetPid(pid TPid) {
+	if p.Pid() == 0 {
+		p.pid = pid
+	}
+}
+
+func (p *Pixiver) UpdateState(state int) {
+	if p.State() == state {
+		return
 	}
 
-	if len(s.proxy) > 0 {
-		if err = c.SetProxy(s.proxy); err != nil {
-			return nil, err
-		}
+	switch state {
+	case PixiverNormal:
+		p.state = PixiverNormal
+		p.limitAt = 0
+
+	case PixiverRateLimiting:
+		p.state = PixiverRateLimiting
+		p.limitAt = time.Now().Nanosecond()
+
+	case PixiverInvalid:
+		p.state = PixiverInvalid
+		p.limitAt = 0
 	}
-
-	s.p[sessionId] = c
-	return c, nil
 }
 
-func (s *pixivPool) Del(sessionId string) {
-	s.m.Lock()
-	defer s.m.Unlock()
-
-	delete(s.p, sessionId)
-}
-
-func (s *pixivPool) SetProxy(u string) {
-	s.proxy = u
-}
-
-func newPool() common.IPool {
-	return &pixivPool{
-		p: map[string]common.IClient{}}
-}
-
-func Pool() common.IPool {
-	return pool
-}
-
-func SetGlobalProxy(url string) {
-	pool.SetProxy(url)
+func NewPixiver(sessionID string) IPixiver {
+	return &Pixiver{sessionID: sessionID}
 }
