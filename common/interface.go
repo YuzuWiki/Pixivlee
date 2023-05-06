@@ -49,8 +49,7 @@ type IContext interface {
 }
 
 type IPool interface {
+	Add(string) (IClient, error)
 	Get(string) (IClient, error)
 	Del(string)
-
-	SetProxy(string)
 }

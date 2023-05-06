@@ -1,6 +1,7 @@
 package Pixivlee
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 	"sync"
@@ -38,63 +39,49 @@ func newClient(sessionId string) (common.IClient, error) {
 type pixivPool struct {
 	m sync.Mutex
 
-	p     map[string]common.IClient
-	proxy string
+	// manage  session
+	sessions map[string]common.IClient
 }
 
-func (s *pixivPool) Get(sessionId string) (common.IClient, error) {
-	var (
-		isOk bool
-		c    common.IClient
-		err  error
-	)
-
+func (s *pixivPool) Add(sessionId string) (c common.IClient, err error) {
 	sessionId = strings.TrimSpace(sessionId)
-	if c, isOk = s.p[sessionId]; isOk {
-		return c, nil
-	}
 
 	s.m.Lock()
 	defer s.m.Unlock()
 
-	if c, isOk = s.p[sessionId]; isOk {
-		return c, nil
+	if _, isOk := s.sessions[sessionId]; isOk {
+		return nil, fmt.Errorf("the pixiver already exists")
 	}
 
 	if c, err = newClient(sessionId); err != nil {
 		return nil, err
 	}
 
-	if len(s.proxy) > 0 {
-		if err = c.SetProxy(s.proxy); err != nil {
-			return nil, err
-		}
-	}
-
-	s.p[sessionId] = c
+	s.sessions[sessionId] = c
 	return c, nil
+}
+
+func (s *pixivPool) Get(sessionId string) (common.IClient, error) {
+	sessionId = strings.TrimSpace(sessionId)
+	if c, isOk := s.sessions[sessionId]; isOk {
+		return c, nil
+	}
+	return nil, fmt.Errorf("non-existent pixiver")
+
 }
 
 func (s *pixivPool) Del(sessionId string) {
 	s.m.Lock()
 	defer s.m.Unlock()
 
-	delete(s.p, sessionId)
-}
-
-func (s *pixivPool) SetProxy(u string) {
-	s.proxy = u
+	delete(s.sessions, sessionId)
 }
 
 func newPool() common.IPool {
 	return &pixivPool{
-		p: map[string]common.IClient{}}
+		sessions: map[string]common.IClient{}}
 }
 
 func Pool() common.IPool {
 	return pool
-}
-
-func SetGlobalProxy(url string) {
-	pool.SetProxy(url)
 }
