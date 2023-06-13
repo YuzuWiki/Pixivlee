@@ -1,9 +1,14 @@
 package poolV2
 
-import "github.com/YuzuWiki/Pixivlee"
+import (
+	"errors"
+
+	"github.com/YuzuWiki/Pixivlee"
+)
 
 // Client http.request, do network
-type Client struct{}
+type Client struct {
+}
 
 func (c *Client) SetHeaders(headers ...Pixivlee.THeader) error {
 	return nil
@@ -13,16 +18,28 @@ func (c *Client) SetCookies(host string, cookies ...Pixivlee.TCookie) error {
 	return nil
 }
 
-// Pool Client pool, manager http.request (client obj)
-type Pool struct {
-}
-
-// acquire  If pool have an idle request, will return
-func (p *Pool) acquire(ctx Pixivlee.IContext) (error, *Client) {
+func newClient(ctx Pixivlee.TContext) (error, *Client) {
 	return nil, nil
 }
 
-// acquire  release request
-func (p *Pool) release(c *Client) error {
-	return nil
+// Pool Client pool, manager http.request (client obj)
+type Pool struct {
+	pool map[string]*Client
+}
+
+func (p *Pool) Client(ctx Pixivlee.TContext) (err error, c *Client) {
+	if !ctx.Pixiver.IsActive() {
+		return errors.New("invalid Cookie"), nil
+	}
+
+	c, isOk := p.pool[ctx.Pixiver.Pid()]
+	if !isOk {
+		err, c = newClient(ctx)
+		if err != nil {
+			return err, nil
+		}
+
+		p.pool[ctx.Pixiver.Pid()] = c
+	}
+	return nil, c
 }

@@ -48,13 +48,14 @@ type IPixiver interface {
 	IsActive() bool
 }
 
-// IContext 上下文信息
-type IContext interface {
+// TContext 上下文信息
+type TContext struct {
+
 	// Pixiver bind ctx
-	Pixiver() IPixiver
+	Pixiver IPixiver
 
 	// ProxyUri transport use
-	ProxyUri() string
+	ProxyUri string
 }
 
 // IApi api实例配置配置信息
@@ -71,9 +72,9 @@ type IClient interface {
 
 // IRequest request interface
 type IRequest interface {
-	Head(IApi, IContext, *TQuery, *TJson) (*http.Response, error)
-	Get(IApi, IContext, *TQuery, *TJson) (*http.Response, error)
-	Post(IApi, IContext, *TQuery, *TJson) (*http.Response, error)
-	Put(IApi, IContext, *TQuery, *TJson) (*http.Response, error)
-	Delete(IApi, IContext, *TQuery, *TJson) (*http.Response, error)
+	Head(IApi, TContext, *TQuery, *TJson) (*http.Response, error)
+	Get(IApi, TContext, *TQuery, *TJson) (*http.Response, error)
+	Post(IApi, TContext, *TQuery, *TJson) (*http.Response, error)
+	Put(IApi, TContext, *TQuery, *TJson) (*http.Response, error)
+	Delete(IApi, TContext, *TQuery, *TJson) (*http.Response, error)
 }
