@@ -13,8 +13,13 @@ import (
 		|
 		V
 	request: {api, ctx, query, body}
+					|
+					V
+				client_pool: {IClient{}, ...}
+			|
+			V
 		before_do:  user检测(IsActive, limit)
-		after_do:
+		after_do:   notify
 */
 
 // type alise
@@ -24,18 +29,30 @@ type (
 
 	// TParams request.body
 	TParams = map[string]struct{}
+
+	// THeader request.header.set
+	THeader = struct {
+		Key   string
+		Value string
+	}
+
+	// TCookie request.cookie body
+	TCookie = http.Cookie
 )
 
 // IPixiver 访问凭据
 type IPixiver interface {
 	Pid() string
-
 	SessID() string
+
 	IsActive() bool
 }
 
 // IContext 上下文信息
 type IContext interface {
+	// Pixiver bind ctx
+	Pixiver() IPixiver
+
 	// ProxyUri transport use
 	ProxyUri() string
 }
@@ -44,6 +61,11 @@ type IContext interface {
 type IApi interface {
 	Method() string
 	Url() string
+}
+
+type IClient interface {
+	SetHeaders(...THeader) error
+	SetCookies(string, ...TCookie) error
 }
 
 // IRequest request interface
