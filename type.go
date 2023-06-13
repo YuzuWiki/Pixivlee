@@ -27,8 +27,8 @@ type (
 	// TQuery request.data
 	TQuery = url.Values
 
-	// TParams request.body
-	TParams = map[string]struct{}
+	// TJson request.body
+	TJson = map[string]struct{}
 
 	// THeader request.header.set
 	THeader = struct {
@@ -63,6 +63,7 @@ type IApi interface {
 	Url() string
 }
 
+// IClient http.request obj
 type IClient interface {
 	SetHeaders(...THeader) error
 	SetCookies(string, ...TCookie) error
@@ -70,9 +71,9 @@ type IClient interface {
 
 // IRequest request interface
 type IRequest interface {
-	Head(IApi, IContext, *TQuery, *TParams) (*http.Response, error)
-	Get(IApi, IContext, *TQuery, *TParams) (*http.Response, error)
-	Post(IApi, IContext, *TQuery, *TParams) (*http.Response, error)
-	Put(IApi, IContext, *TQuery, *TParams) (*http.Response, error)
-	Delete(IApi, IContext, *TQuery, *TParams) (*http.Response, error)
+	Head(IApi, IContext, *TQuery, *TJson) (*http.Response, error)
+	Get(IApi, IContext, *TQuery, *TJson) (*http.Response, error)
+	Post(IApi, IContext, *TQuery, *TJson) (*http.Response, error)
+	Put(IApi, IContext, *TQuery, *TJson) (*http.Response, error)
+	Delete(IApi, IContext, *TQuery, *TJson) (*http.Response, error)
 }
