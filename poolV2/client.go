@@ -2,12 +2,26 @@ package poolV2
 
 import (
 	"errors"
+	"net/http"
 
 	"github.com/YuzuWiki/Pixivlee"
 )
 
 // Client http.request, do network
 type Client struct {
+	http.Client
+
+	// header: manage header
+	// 		header： 抽象 http.Header?
+
+	// cookie: manage cookie
+	//		cookie 抽象 http.Cookie?
+
+	// hooks: manage hooks
+	//		register.RegisterBefore:
+	//		register.RegisterAfter
+
+	// transport: http.transport
 }
 
 func (c *Client) SetHeaders(headers ...Pixivlee.THeader) error {
