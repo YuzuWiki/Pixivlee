@@ -9,13 +9,14 @@ import (
 
 // Client http.request, do network
 type Client struct {
-	http.Client
+	client http.Client
 
 	// header: manage header
-	// 		header： 抽象 http.Header?
+	// 		set default header
+	header Header
 
 	// cookie: manage cookie
-	//		cookie 抽象 http.Cookie?
+	//		cookie http.Cookie proxy
 
 	// hooks: manage hooks
 	//		register.RegisterBefore:
