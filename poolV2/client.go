@@ -9,11 +9,11 @@ import (
 
 // Client http.request, do network
 type Client struct {
-	client http.Client
+	http.Client
 
 	// header: manage header
 	// 		set default header
-	header Header
+	Header Header
 
 	// cookie: manage cookie
 	//		cookie http.Cookie proxy
@@ -25,6 +25,14 @@ type Client struct {
 	// transport: http.transport
 }
 
+func (c *Client) BeforeRequest() error {
+	return nil
+}
+
+func (c *Client) AfterResponse() error {
+	return nil
+
+}
 func (c *Client) SetHeaders(headers ...Pixivlee.THeader) error {
 	return nil
 }
