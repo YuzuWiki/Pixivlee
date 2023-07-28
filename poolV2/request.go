@@ -1,8 +1,9 @@
 package poolV2
 
 import (
-	"github.com/YuzuWiki/Pixivlee"
 	"net/http"
+
+	"github.com/YuzuWiki/Pixivlee"
 )
 
 type Request struct {

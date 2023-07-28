@@ -6,6 +6,32 @@ import (
 )
 
 /*
+	Interface:
+  		IUserCtx:  账户上下文
+		IRequestCtx:  请求上下文
+
+
+	Pool Object:
+  		user_pool(ctx, request): -> 	IUserCtx
+
+		request_pool(ctx):  ->   just do request
+			-> setting: 	global config, eg: proxy, 负载策略
+			-> request: 	请求上下文
+				-> proxy: 	代理
+			-> transport:
+				-> policy: 	负载转发策略
+			-> hooks:
+				-> before:  请求前钩子
+				-> after:   请求后钩子
+
+	中间件:
+		limiter:		限流器(中间件)
+
+	Other:
+		setting:		配置文件
+
+	.................................
+
   user_pool: { IPixiver{}... }
 		|
 		V
