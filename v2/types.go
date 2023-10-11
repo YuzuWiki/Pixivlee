@@ -1,14 +1,17 @@
 package v2
 
+type TPid int64 // pid type(alise)
+
 // IPixiver pixiver
 type IPixiver interface {
-
-	// Pid pixiv id
-	Pid() int64
-
-	// Status 账户状态
-	Status() uint8
-
-	// IsEnable 可用状态
+	Pid() TPid
+	SessID() string
 	IsEnable() bool
+}
+
+// IPool pixiver pool
+type IPool interface {
+	Push(pixiver IPixiver) error
+	Pop() IPixiver
+	List() []IPixiver
 }

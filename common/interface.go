@@ -6,8 +6,8 @@ import (
 )
 
 type (
-	Query        = url.Values          // requests data
-	Params       = map[string]struct{} // requests body
+	Query        = url.Values          // pool data
+	Params       = map[string]struct{} // pool body
 	BeforeHook   = func(req *http.Request) error
 	AfterHook    = func(resp *http.Response) error
 	HeaderOption struct {
