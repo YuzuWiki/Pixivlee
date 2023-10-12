@@ -1,6 +1,10 @@
 package v2
 
-type TPid int64 // pid type(alise)
+type TPid uint64 // pid type(alise)
+
+type TArtId uint64
+
+type TIllustType uint8
 
 // IPixiver pixiver
 type IPixiver interface {
