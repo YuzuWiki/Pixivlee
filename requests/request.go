@@ -48,6 +48,7 @@ func (r *requests) do(method, u string, query *common.Query, params *common.Para
 		return
 	}
 
+	// https://www.fanbox.cc/
 	switch strings.SplitN(strings.Replace(req.URL.Path, "/", "", 1), "/", 3)[0] {
 	case "fanbox":
 		resp, err = r.Transport.RoundTrip(req)
