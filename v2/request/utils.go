@@ -1,12 +1,13 @@
-package v2
+package request
 
 import (
 	"bytes"
 	"encoding/json"
+	"golang.org/x/net/http/httpproxy"
 	"net/http"
 	"net/url"
 
-	"golang.org/x/net/http/httpproxy"
+	"github.com/YuzuWiki/Pixivlee/v2"
 )
 
 func proxyFromUrl(proxyUrl string) func(*http.Request) (*url.URL, error) {
@@ -21,7 +22,7 @@ func proxyFromUrl(proxyUrl string) func(*http.Request) (*url.URL, error) {
 	}
 }
 
-func encodeURL(u string, data Query) (string, error) {
+func encodeURL(u string, data v2.Query) (string, error) {
 	URL, err := url.Parse(u)
 	if err != nil {
 		return "", err
@@ -34,7 +35,7 @@ func encodeURL(u string, data Query) (string, error) {
 	return URL.String(), nil
 }
 
-func encodeBody(params Params) *bytes.Buffer {
+func encodeBody(params v2.Params) *bytes.Buffer {
 	if body, err := json.Marshal(params); err == nil {
 		return bytes.NewBuffer(body)
 	}

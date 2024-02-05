@@ -1,4 +1,4 @@
-package jsonObject
+package json
 
 import (
 	"time"

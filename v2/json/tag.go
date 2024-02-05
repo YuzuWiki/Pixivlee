@@ -1,4 +1,4 @@
-package jsonObject
+package json
 
 import v2 "github.com/YuzuWiki/Pixivlee/v2"
 

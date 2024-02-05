@@ -1,4 +1,4 @@
-package jsonObject
+package json
 
 type extra struct {
 	Meta struct {

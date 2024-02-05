@@ -12,8 +12,6 @@ type (
 
 	Query        = url.Values
 	Params       = map[string]struct{}
-	BeforeHook   = func(req *http.Request) error
-	AfterHook    = func(resp *http.Response) error
 	HeaderOption struct {
 		Key   string
 		Value string
@@ -39,4 +37,12 @@ type ITransport interface {
 
 	SetProxy(string) error
 	UnSetProxy() error
+}
+
+type IRequest interface {
+	Head(u string, query Query, params Params) (*http.Response, error)
+	Get(u string, query Query, params Params) (*http.Response, error)
+	Post(u string, query Query, params Params) (*http.Response, error)
+	Put(u string, query Query, params Params) (*http.Response, error)
+	Delete(u string, query Query, params Params) (*http.Response, error)
 }
