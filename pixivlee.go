@@ -1,87 +1,66 @@
 package Pixivlee
 
 import (
-	"fmt"
-	"net/http"
+	"strconv"
 	"strings"
-	"sync"
-
-	"github.com/YuzuWiki/Pixivlee/common"
-	"github.com/YuzuWiki/Pixivlee/requests"
+	"time"
 )
 
-func newClient(sessionId string) (common.IClient, error) {
-	c := requests.NewRequest()
+type Pixiver struct {
+	pid       TPid
+	sessionID string
 
-	// set default header
-	c.SetHeader(
-		common.HeaderOption{Key: "User-Agent", Value: common.UserAgent},
-		common.HeaderOption{Key: "referer", Value: "https://" + common.PixivHost},
-	)
-
-	// set cookie
-	if len(sessionId) > 0 {
-		if err := c.SetCookies(
-			common.PixivHost,
-			&http.Cookie{
-				Name:   common.Phpsessid,
-				Value:  sessionId,
-				Path:   "/",
-				Domain: common.PixivDomain,
-			},
-		); err != nil {
-			return nil, err
-		}
-	}
-	return c, nil
+	state   int
+	limitAt int
 }
 
-type pixivPool struct {
-	m sync.Mutex
-
-	// manage  session
-	sessions map[string]common.IClient
-}
-
-func (s *pixivPool) Add(sessionId string) (c common.IClient, err error) {
-	sessionId = strings.TrimSpace(sessionId)
-
-	s.m.Lock()
-	defer s.m.Unlock()
-
-	if _, isOk := s.sessions[sessionId]; isOk {
-		return nil, fmt.Errorf("the pixiver already exists")
+func (p *Pixiver) Pid() TPid {
+	if p.pid > 0 {
+		return p.pid
 	}
 
-	if c, err = newClient(sessionId); err != nil {
-		return nil, err
+	if arr := strings.SplitN(p.sessionID, "_", 2); len(arr) == 2 {
+		pid, _ := strconv.ParseUint(arr[0], 10, 64)
+		return TPid(pid)
 	}
 
-	s.sessions[sessionId] = c
-	return c, nil
+	return 0
 }
 
-func (s *pixivPool) Get(sessionId string) (common.IClient, error) {
-	sessionId = strings.TrimSpace(sessionId)
-	if c, isOk := s.sessions[sessionId]; isOk {
-		return c, nil
+func (p *Pixiver) SessionID() string {
+	return p.sessionID
+}
+
+func (p *Pixiver) State() int {
+	return p.state
+}
+
+func (p *Pixiver) SetPid(pid TPid) {
+	if p.Pid() == 0 {
+		p.pid = pid
 	}
-	return nil, fmt.Errorf("non-existent pixiver")
-
 }
 
-func (s *pixivPool) Del(sessionId string) {
-	s.m.Lock()
-	defer s.m.Unlock()
+func (p *Pixiver) UpdateState(state int) {
+	if p.State() == state {
+		return
+	}
 
-	delete(s.sessions, sessionId)
+	switch state {
+	case PixiverNormal:
+		p.state = PixiverNormal
+		p.limitAt = 0
+
+	case PixiverRateLimiting:
+		p.state = PixiverRateLimiting
+		p.limitAt = time.Now().Nanosecond()
+
+	case PixiverInvalid:
+		p.state = PixiverInvalid
+		p.limitAt = 0
+	}
 }
 
-func newPool() common.IPool {
-	return &pixivPool{
-		sessions: map[string]common.IClient{}}
-}
-
-func Pool() common.IPool {
-	return pool
+func NewPixiver(sessionID string) IPixiver {
+	return &Pixiver{sessionID: sessionID}
 }
