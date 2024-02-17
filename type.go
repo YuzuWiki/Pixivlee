@@ -12,11 +12,11 @@ import (
 
 
 	Pool Object:
-  		user_pool(ctx, request): -> 	IUserCtx
+  		user_pool(ctx, client): -> 	IUserCtx
 
-		request_pool(ctx):  ->   just do request
+		request_pool(ctx):  ->   just do client
 			-> setting: 	global config, eg: proxy, 负载策略
-			-> request: 	请求上下文
+			-> client: 	请求上下文
 				-> proxy: 	代理
 			-> transport:
 				-> policy: 	负载转发策略
@@ -38,7 +38,7 @@ import (
     context(user, proxy)
 		|
 		V
-	request: {api, ctx, query, body}
+	client: {api, ctx, query, body}
 					|
 					V
 				client_pool: {IClient{}, ...}
@@ -50,19 +50,19 @@ import (
 
 // type alise
 type (
-	// TQuery request.data
+	// TQuery client.data
 	TQuery = url.Values
 
-	// TJson request.body
+	// TJson client.body
 	TJson = map[string]struct{}
 
-	// THeader request.header.set
+	// THeader client.header.set
 	THeader = struct {
 		Key   string
 		Value string
 	}
 
-	// TCookie request.cookie body
+	// TCookie client.cookie body
 	TCookie = http.Cookie
 )
 
@@ -90,13 +90,13 @@ type IApi interface {
 	Url() string
 }
 
-// IClient http.request obj
+// IClient http.client obj
 type IClient interface {
 	SetHeaders(...THeader) error
 	SetCookies(string, ...TCookie) error
 }
 
-// IRequest request interface
+// IRequest client interface
 type IRequest interface {
 	Head(IApi, TContext, *TQuery, *TJson) (*http.Response, error)
 	Get(IApi, TContext, *TQuery, *TJson) (*http.Response, error)

@@ -1,6 +1,4 @@
-package json
-
-import v2 "github.com/YuzuWiki/Pixivlee/v2"
+package jsonObject
 
 type userData struct {
 	Name         string `json:"name"`
@@ -8,7 +6,7 @@ type userData struct {
 }
 
 type User struct {
-	UserID     v2.TPid  `json:"userId,string"`
+	UserID     TPid     `json:"userId,string"`
 	Name       string   `json:"name"`
 	Avatar     string   `json:"imageBig"`
 	IsFollowed bool     `json:"isFollowed"`

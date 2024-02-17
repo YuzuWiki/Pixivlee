@@ -1,4 +1,4 @@
-package json
+package jsonObject
 
 type extra struct {
 	Meta struct {
@@ -21,16 +21,16 @@ type extra struct {
 	} `json:"meta"`
 }
 
-// TopProfileDTO return user's  profile (top)
-type TopProfileDTO struct {
+// ProfileTop return user's  profile (top)
+type ProfileTop struct {
 	Illusts   jsonMap[string, illustItem] `json:"illusts"`
 	Manga     jsonMap[string, mangaItem]  `json:"manga"`
 	Novels    jsonMap[string, novelItem]  `json:"novels"`
 	ExtraData extra                       `json:"extra_data"`
 }
 
-// AllProfile return user's  profile (all)
-type AllProfile struct {
+// ProfileAll return user's  profile (all)
+type ProfileAll struct {
 	Illusts artWorkIds `json:"illusts"`
 	Manga   artWorkIds `json:"mangas"`
 	Novel   artWorkIds `json:"novels"`

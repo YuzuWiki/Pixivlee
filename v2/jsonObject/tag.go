@@ -1,6 +1,4 @@
-package json
-
-import v2 "github.com/YuzuWiki/Pixivlee/v2"
+package jsonObject
 
 type multilingualItem struct {
 	En     string `json:"en"`
@@ -10,12 +8,12 @@ type multilingualItem struct {
 }
 
 type tagDigest struct {
-	Id           v2.TArtId `json:"id,string"`
-	Abstract     string    `json:"abstract"`
-	Image        string    `json:"image"`
-	ParentTag    string    `json:"parentTag"`
-	SiblingsTags []string  `json:"siblingsTags"`
-	ChildrenTags []string  `json:"childrenTags"`
+	Id           TArtId   `json:"id,string"`
+	Abstract     string   `json:"abstract"`
+	Image        string   `json:"image"`
+	ParentTag    string   `json:"parentTag"`
+	SiblingsTags []string `json:"siblingsTags"`
+	ChildrenTags []string `json:"childrenTags"`
 }
 
 // Tag  https://www.pixiv.net/ajax/search/tags/%E4%BA%8C%E6%AC%A1%E5%89%B5%E4%BD%9C?lang=zh

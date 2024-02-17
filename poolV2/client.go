@@ -7,7 +7,7 @@ import (
 	"github.com/YuzuWiki/Pixivlee"
 )
 
-// Client http.request, do network
+// Client http.client, do network
 type Client struct {
 	http.Client
 
@@ -45,7 +45,7 @@ func newClient(ctx Pixivlee.TContext) (error, *Client) {
 	return nil, nil
 }
 
-// Pool Client pool, manager http.request (client obj)
+// Pool Client pool, manager http.client (client obj)
 type Pool struct {
 	pool map[string]*Client
 }

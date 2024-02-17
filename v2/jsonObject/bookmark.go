@@ -1,17 +1,15 @@
-package json
+package jsonObject
 
 import (
 	"time"
-
-	v2 "github.com/YuzuWiki/Pixivlee/v2"
 )
 
 type workItem struct {
-	ID             v2.TArtId `json:"id,string"`
+	ID             TArtId    `json:"id"`
 	Title          string    `json:"title"`
 	URL            string    `json:"url"`
 	Description    string    `json:"description"`
-	UserID         v2.TPid   `json:"userId,string"`
+	Pid            TPid      `json:"userId"`
 	UserName       string    `json:"userName"`
 	PageCount      int       `json:"pageCount"`
 	IsBookmarkable bool      `json:"isBookmarkable"`
