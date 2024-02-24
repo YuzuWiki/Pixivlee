@@ -1,8 +1,7 @@
 package Pixivlee
 
 const (
-	FanboxHost = "www.fanbox.cc"
-
+	FanboxHost  = "www.fanbox.cc"
 	PixivDomain = ".pixiv.net"
 	PixivHost   = "www.pixiv.net"
 	PximgHost   = "i.pximg.net"
@@ -41,7 +40,7 @@ const (
 	RankOriginal  = "original" // 原创
 	RankAI        = "daily_ai" // AI
 	RankAIR18     = "daily_r18_ai"
-	RankMale      = "male" //最受到男性欢迎
+	RankMale      = "male" // 最受到男性欢迎
 	RankMaleR18   = "male_r18"
 	RankFemale    = "female" // 最收到女性欢迎
 	RankFemaleR18 = "female_r18"

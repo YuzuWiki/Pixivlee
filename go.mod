@@ -2,7 +2,10 @@ module github.com/YuzuWiki/Pixivlee
 
 go 1.20
 
-require golang.org/x/net v0.19.0
+require (
+	github.com/imroc/req/v3 v3.42.3
+	golang.org/x/net v0.19.0 // indirect
+)
 
 require (
 	github.com/andybalholm/brotli v1.0.6 // indirect
@@ -11,7 +14,6 @@ require (
 	github.com/google/pprof v0.0.0-20231229205709-960ae82b1e42 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
-	github.com/imroc/req/v3 v3.42.3 // indirect
 	github.com/klauspost/compress v1.17.4 // indirect
 	github.com/onsi/ginkgo/v2 v2.13.2 // indirect
 	github.com/quic-go/qpack v0.4.0 // indirect
