@@ -1,34 +1,56 @@
 package Pixivlee
 
 import (
-	"github.com/imroc/req/v3"
 	"time"
+
+	"github.com/imroc/req/v3"
 )
 
 var (
-	requestClient *req.Client = nil
+	requests *req.Client = nil
 )
 
-func defaultHeader(c *req.Client, host string) *req.Client {
-	c.SetBaseURL("https://" + host)
-
-	c.OnBeforeRequest(func(client *req.Client, req *req.Request) error {
-		req.SetHeader("User-Agent", UserAgent).
-			SetHeader("referer", "https://"+host)
-		return nil
-	})
-
-	return c
+func SetProxy(proxyUrl string) *req.Client {
+	return requests.SetProxyURL(proxyUrl)
 }
 
-func SetProxy(proxyUrl string) {
-	requestClient.SetProxyURL(proxyUrl)
+func UnSetProxy() *req.Client {
+	requests.SetProxy(nil)
+
+	// close idle connect
+	//requests.CloseIdleConnections()
+	return requests
 }
 
-func SetTimeOut(second time.Duration) {
-	requestClient.SetTimeout(second * time.Second)
+func SetTimeOut(second int) *req.Client {
+	return requests.SetTimeout(time.Duration(second) * time.Second)
+}
+
+func OnBeforeRequest(fn req.RequestMiddleware) *req.Client {
+	return requests.OnBeforeRequest(fn)
+}
+
+func OnAfterResponse(fn req.ResponseMiddleware) *req.Client {
+	return requests.OnAfterResponse(fn)
+}
+
+func EnableDebug() *req.Client {
+	return requests.EnableDebugLog()
 }
 
 func init() {
-	requestClient = defaultHeader(req.C(), PixivHost).SetTimeout(15 * time.Second).EnableDebugLog()
+	requests = req.C()
+
+	// default base url
+	requests.SetBaseURL("https://" + PIXIV_HOST)
+
+	// default header
+	requests.OnBeforeRequest(func(client *req.Client, req *req.Request) error {
+		req.SetHeader("User-Agent", USER_AGENT).
+			SetHeader("referer", "https://"+PIXIV_HOST)
+		return nil
+	})
+
+	// default timeout
+	requests.SetTimeout(15 * time.Second)
 }

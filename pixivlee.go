@@ -1,66 +1,72 @@
 package Pixivlee
 
 import (
+	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
-	"time"
+
+	"github.com/imroc/req/v3"
+
+	"github.com/YuzuWiki/Pixivlee/types"
 )
 
-type Pixiver struct {
-	pid       TPid
-	sessionID string
-
-	state   int
-	limitAt int
+type IPixiver interface {
+	Pid() types.TPid
+	SessionID() string
 }
 
-func (p *Pixiver) Pid() TPid {
-	if p.pid > 0 {
-		return p.pid
+type tPixiverV2 struct {
+	pid       types.TPid
+	sessionId string
+}
+
+func (p *tPixiverV2) Pid() types.TPid {
+	return p.pid
+}
+
+func (p *tPixiverV2) SessionID() string {
+	return p.sessionId
+}
+
+func NewPixiver(sessionId string) (IPixiver, error) {
+	sessionId = strings.TrimSpace(sessionId)
+	if len(sessionId) == 0 {
+		return nil, fmt.Errorf("sessionid is invalid, must not be empty!")
 	}
 
-	if arr := strings.SplitN(p.sessionID, "_", 2); len(arr) == 2 {
-		pid, _ := strconv.ParseUint(arr[0], 10, 64)
-		return TPid(pid)
+	pixiver := &tPixiverV2{
+		sessionId: sessionId,
 	}
 
-	return 0
-}
-
-func (p *Pixiver) SessionID() string {
-	return p.sessionID
-}
-
-func (p *Pixiver) State() int {
-	return p.state
-}
-
-func (p *Pixiver) SetPid(pid TPid) {
-	if p.Pid() == 0 {
-		p.pid = pid
-	}
-}
-
-func (p *Pixiver) UpdateState(state int) {
-	if p.State() == state {
-		return
+	arr := strings.SplitN(strings.TrimSpace(sessionId), "_", 2)
+	if len(arr) != 2 {
+		return nil, fmt.Errorf("sessionid is invalid, format error!")
 	}
 
-	switch state {
-	case PixiverNormal:
-		p.state = PixiverNormal
-		p.limitAt = 0
-
-	case PixiverRateLimiting:
-		p.state = PixiverRateLimiting
-		p.limitAt = time.Now().Nanosecond()
-
-	case PixiverInvalid:
-		p.state = PixiverInvalid
-		p.limitAt = 0
+	pid, err := strconv.ParseUint(arr[0], 10, 64)
+	if err != nil {
+		return nil, fmt.Errorf("sessionid is invalid, (pid) %s", err.Error())
 	}
+	pixiver.pid = types.TPid(pid)
+
+	return pixiver, nil
 }
 
-func NewPixiver(sessionID string) IPixiver {
-	return &Pixiver{sessionID: sessionID}
+func NewRequests(p IPixiver) *req.Request {
+	r := requests.NewRequest()
+
+	// set cookie
+	r.SetCookies(
+		&http.Cookie{
+			Name:   PHPSESSID,
+			Value:  p.SessionID(),
+			Path:   "/",
+			Domain: PIXIV_DOMAIN,
+		})
+
+	// default params
+	r.AddQueryParam("lang", "jp")
+
+	return r
 }
