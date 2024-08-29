@@ -1,34 +1,8 @@
 package types
 
 import (
-	"encoding/json"
-	"strconv"
 	"time"
 )
-
-type TArtIds []TArtId
-
-func (o *TArtIds) UnmarshalJSON(body []byte) error {
-	var artDict map[string]any
-
-	err := json.Unmarshal(body, &artDict)
-	if err != nil {
-		return err
-	}
-
-	artIds := make(TArtIds, 0)
-	for artIdStr, _ := range artDict {
-		artId, err := strconv.ParseInt(artIdStr, 10, 64)
-		if err != nil {
-			return err
-		}
-
-		artIds = append(artIds, TArtId(artId))
-	}
-
-	*o = artIds
-	return nil
-}
 
 type TIllustItem struct {
 	ID              TArtId    `json:"id"`
