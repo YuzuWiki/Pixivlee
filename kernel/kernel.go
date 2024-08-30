@@ -1,11 +1,12 @@
 package kernel
 
 import (
-	"github.com/YuzuWiki/Pixivlee/types"
 	"net/http"
 	"time"
 
 	"github.com/imroc/req/v3"
+
+	"github.com/YuzuWiki/Pixivlee/types"
 )
 
 type Kernel struct {
