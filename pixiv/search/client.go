@@ -12,7 +12,7 @@ type Client struct {
 func (c *Client) Tags(JpName string) (*TagDTO, error) {
 	data := types.TPixivResponse[TagDTO]{}
 
-	r := c.kernel.NewRequests().SetSuccessResult(&data)
+	r := c.kernel.NewRequests().SetResult(&data)
 
 	if _, err := r.Get(fmt.Sprintf("/ajax/search/tags/%s", JpName)); err != nil {
 		return nil, err

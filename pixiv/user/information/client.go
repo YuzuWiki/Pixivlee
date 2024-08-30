@@ -13,9 +13,7 @@ type Client struct {
 func (c *Client) Info(pid types.TPid) (*InfoDTO, error) {
 	data := types.TPixivResponse[InfoDTO]{}
 
-	r := c.kernel.NewRequests().SetSuccessResult(&data)
-
-	r.SetPathParam("full", "1").SetSuccessResult(&data)
+	r := c.kernel.NewRequests().SetResult(&data).SetPathParam("full", "1")
 
 	if _, err := r.Get(fmt.Sprintf("/ajax/user/%d", pid)); err != nil {
 		return nil, err

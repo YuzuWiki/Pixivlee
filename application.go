@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/imroc/req/v3"
+	resty "github.com/go-resty/resty/v2"
 
 	fanbox "github.com/YuzuWiki/Pixivlee/fanbox"
 	kernel "github.com/YuzuWiki/Pixivlee/kernel"
@@ -52,13 +52,10 @@ func newContainer(api, host string, option kernel.Options) (types.IKernel, error
 		container.OnAfterResponse(fn)
 	}
 
-	container.OnAfterResponse(func(client *req.Client, resp *req.Response) error {
+	container.OnAfterResponse(func(client *resty.Client, resp *resty.Response) error {
 		// Todo: do err status
-		if HttpCode := resp.StatusCode; HttpCode != 200 {
-			body, err := resp.ToBytes()
-			if err != nil {
-				return err
-			}
+		if HttpCode := resp.StatusCode(); HttpCode != 200 {
+			body := resp.Body()
 
 			// eg. 400  {"error":"general_error"}
 			return fmt.Errorf(fmt.Sprintf("%d  %s", HttpCode, string(body)))
@@ -67,14 +64,14 @@ func newContainer(api, host string, option kernel.Options) (types.IKernel, error
 	})
 
 	if option.Http.UserAgent == "" {
-		container.OnBeforeRequest(func(client *req.Client, req *req.Request) error {
+		container.OnBeforeRequest(func(client *resty.Client, req *resty.Request) error {
 			req.SetHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0").
 				SetHeader("referer", host).
 				SetHeader("origin", host)
 			return nil
 		})
 	} else {
-		container.OnBeforeRequest(func(client *req.Client, req *req.Request) error {
+		container.OnBeforeRequest(func(client *resty.Client, req *resty.Request) error {
 			req.SetHeader("User-Agent", strings.TrimSpace(option.Http.UserAgent)).
 				SetHeader("referer", host).
 				SetHeader("origin", host)

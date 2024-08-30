@@ -13,20 +13,20 @@ func rank(c *Client, mode string, content string, page int, date string) (*RankD
 	var data RankDTO
 
 	r := c.kernel.NewRequests().
-		SetSuccessResult(&data).
-		AddQueryParam("page", fmt.Sprint(page)).
-		AddQueryParam("format", "json")
+		SetResult(&data).
+		SetQueryParam("page", fmt.Sprint(page)).
+		SetQueryParam("format", "json")
 
 	if len(mode) > 0 {
-		r.AddQueryParam("mode", mode)
+		r.SetQueryParam("mode", mode)
 	}
 
 	if len(content) > 0 {
-		r.AddQueryParam("content", content)
+		r.SetQueryParam("content", content)
 	}
 
 	if len(date) > 0 {
-		r.AddQueryParam("date", date)
+		r.SetQueryParam("date", date)
 	}
 
 	if _, err := r.Get(fmt.Sprintf("/ranking.php")); err != nil {

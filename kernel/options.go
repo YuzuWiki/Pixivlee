@@ -1,6 +1,8 @@
 package kernel
 
-import "github.com/imroc/req/v3"
+import (
+	resty "github.com/go-resty/resty/v2"
+)
 
 type HttpOption struct {
 	IsDebug   bool
@@ -8,8 +10,8 @@ type HttpOption struct {
 	ProxyUrl  string
 	UserAgent string
 
-	OnBeforeRequest []req.RequestMiddleware
-	OnAfterResponse []req.ResponseMiddleware
+	OnBeforeRequest []resty.RequestMiddleware
+	OnAfterResponse []resty.ResponseMiddleware
 }
 
 type PixivOption struct {

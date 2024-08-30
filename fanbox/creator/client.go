@@ -19,9 +19,10 @@ func (c *Client) Get(pid types.TPid) (*InfoDTO, error) {
 		return nil, err
 	}
 
-	CreatorUrl := resp.Response.Request.URL.Host
+	// {CreatorName}.fanbox.cc
+	CreatorUrl := resp.RawResponse.Request.URL.Host
 	if !strings.HasSuffix(CreatorUrl, ".fanbox.cc") {
-		return nil, nil
+		return nil, fmt.Errorf("not found creator")
 	}
 
 	CreatorId, _ := strings.CutSuffix(CreatorUrl, ".fanbox.cc")
@@ -41,7 +42,7 @@ func (c *Client) Creator(username string) (*CreatorDTO, error) {
 	data := types.TPixivResponse[CreatorDTO]{}
 	r := c.kernel.NewRequests().
 		SetHeaders(map[string]string{"Referer": url, "Origin": url}).
-		SetSuccessResult(&data)
+		SetResult(&data)
 
 	if _, err := r.Get(fmt.Sprintf("/creator.get?creatorId=%s", username)); err != nil {
 		return nil, err

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/imroc/req/v3"
+	resty "github.com/go-resty/resty/v2"
 
 	"github.com/YuzuWiki/Pixivlee/types"
 )
@@ -12,7 +12,7 @@ import (
 type Kernel struct {
 	pixiver types.IPixiver
 
-	requests *req.Client
+	session *resty.Client
 }
 
 func (k *Kernel) SetPixiver(pixiver types.IPixiver) {
@@ -20,60 +20,61 @@ func (k *Kernel) SetPixiver(pixiver types.IPixiver) {
 }
 
 func (k *Kernel) EnableDebug() *Kernel {
-	k.requests.EnableDebugLog()
+	k.session.Debug = true
 	return k
 }
 
 func (k *Kernel) SetBaseURL(baseUrl string) *Kernel {
-	k.requests.SetBaseURL(baseUrl)
+	k.session.SetBaseURL(baseUrl)
 	return k
 }
 
 func (k *Kernel) SetProxy(proxyUrl string) *Kernel {
-	k.requests.SetProxyURL(proxyUrl)
+	k.session.SetProxy(proxyUrl)
 	return k
 }
 
 func (k *Kernel) UnSetProxy() *Kernel {
-	k.requests.SetProxy(nil)
+	k.session.RemoveProxy()
 	return k
 }
 
 func (k *Kernel) SetTimeOut(second int) *Kernel {
-	k.requests.SetTimeout(time.Duration(second) * time.Second)
+	k.session.SetTimeout(time.Duration(second) * time.Second)
 	return k
 }
 
-func (k *Kernel) OnBeforeRequest(fn req.RequestMiddleware) *Kernel {
-	k.requests.OnBeforeRequest(fn)
+func (k *Kernel) OnBeforeRequest(fn resty.RequestMiddleware) *Kernel {
+	k.session.OnBeforeRequest(fn)
 	return k
 }
 
-func (k *Kernel) OnAfterResponse(fn req.ResponseMiddleware) *Kernel {
-	k.requests.OnAfterResponse(fn)
+func (k *Kernel) OnAfterResponse(fn resty.ResponseMiddleware) *Kernel {
+	k.session.OnAfterResponse(fn)
 	return k
 }
 
-func (k *Kernel) NewRequests() *req.Request {
-	r := k.requests.NewRequest()
+func (k *Kernel) NewRequests() *resty.Request {
+	r := k.session.NewRequest()
 
 	// set cookie
-	r.SetCookies(
-		&http.Cookie{
+	r.SetCookies([]*http.Cookie{
+		{
 			Name:   "PHPSESSID",
 			Value:  k.pixiver.SessionID(),
 			Path:   "/",
 			Domain: ".pixiv.net",
-		})
+		},
+	})
 
 	// default params
-	r.AddQueryParam("lang", "jp")
+	r.SetQueryParam("lang", "jp")
 	return r
 }
 
 func NewKernel() *Kernel {
 	return &Kernel{
-		pixiver:  nil,
-		requests: req.NewClient(),
+		pixiver: nil,
+		session: resty.New(),
 	}
 }

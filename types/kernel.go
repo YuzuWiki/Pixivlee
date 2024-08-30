@@ -5,11 +5,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/imroc/req/v3"
+	resty "github.com/go-resty/resty/v2"
 )
 
 type IKernel interface {
-	NewRequests() *req.Request
+	NewRequests() *resty.Request
 }
 
 type IPixiver interface {

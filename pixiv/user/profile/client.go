@@ -13,7 +13,7 @@ type Client struct {
 func profile[T any](c *Client, mod string, pid types.TPid) (*T, error) {
 	data := types.TPixivResponse[T]{}
 
-	r := c.kernel.NewRequests().SetSuccessResult(&data)
+	r := c.kernel.NewRequests().SetResult(&data)
 
 	if _, err := r.Get(fmt.Sprintf("/ajax/user/%d/profile/%s", pid, mod)); err != nil {
 		return nil, err

@@ -15,9 +15,9 @@ func followedLast(c *Client, mode string, page int) (*FollowLatestDTO, error) {
 	data := types.TPixivResponse[FollowLatestDTO]{}
 
 	r := c.kernel.NewRequests().
-		AddQueryParam("pixiver", fmt.Sprint(page)).
-		AddQueryParam("mode", mode).
-		SetSuccessResult(&data)
+		SetQueryParam("pixiver", fmt.Sprint(page)).
+		SetQueryParam("mode", mode).
+		SetResult(&data)
 
 	if _, err := r.Get(fmt.Sprintf("/ajax/follow_latest/%s", mode)); err != nil {
 		return nil, err

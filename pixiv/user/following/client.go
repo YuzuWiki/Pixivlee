@@ -2,6 +2,7 @@ package following
 
 import (
 	"fmt"
+
 	"github.com/YuzuWiki/Pixivlee/types"
 )
 
@@ -18,7 +19,7 @@ func (c *Client) List(pid types.TArtId, limit int, offset int) (*ListDTO, error)
 			"limit":  fmt.Sprint(limit),
 			"tag":    "",
 			"rest":   "show",
-		}).SetSuccessResult(&data)
+		}).SetResult(&data)
 
 	if _, err := r.Get(fmt.Sprintf("/ajax/user/%d/following", pid)); err != nil {
 		return nil, err

@@ -14,11 +14,11 @@ func (c *Client) illust(rest string, pid types.TPid, tag string, offset, limit i
 	data := types.TPixivResponse[BookmarkDTO]{}
 
 	r := c.kernel.NewRequests().
-		AddQueryParam("tag", tag).
-		AddQueryParam("limit", fmt.Sprint(limit)).
-		AddQueryParams("offset", fmt.Sprint(offset)).
-		AddQueryParams("rest", rest).
-		SetSuccessResult(&data)
+		SetQueryParam("tag", tag).
+		SetQueryParam("limit", fmt.Sprint(limit)).
+		SetQueryParam("offset", fmt.Sprint(offset)).
+		SetQueryParam("rest", rest).
+		SetResult(&data)
 
 	if _, err := r.Get(fmt.Sprintf("/ajax/user/%d/illusts/bookmarks", pid)); err != nil {
 		return nil, err

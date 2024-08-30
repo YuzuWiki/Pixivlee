@@ -13,7 +13,7 @@ type Client struct {
 func get[T any](c *Client, artType string, artIId types.TArtId) (*T, error) {
 	data := types.TPixivResponse[T]{}
 
-	r := c.kernel.NewRequests().SetSuccessResult(&data)
+	r := c.kernel.NewRequests().SetResult(&data)
 
 	if _, err := r.Get(fmt.Sprintf("/ajax/%s/%d", artType, artIId)); err != nil {
 		return nil, err

@@ -15,14 +15,12 @@ type Client struct {
 func (c *Client) Info(PostId types.TPostId) (*PostDTO, error) {
 	response := types.TFanboxResponse[PostDTO]{}
 
-	r := c.kernel.NewRequests().SetSuccessResult(&response)
-	resp, err := r.Get(fmt.Sprintf("/post.info?postId=%d", PostId))
-	if err != nil {
+	r := c.kernel.NewRequests().SetResult(&response)
+
+	if _, err := r.Get(fmt.Sprintf("/post.info?postId=%d", PostId)); err != nil {
 		return nil, err
 	}
-	resp.ErrorResult()
-	fmt.Println(resp.StatusCode)
-	fmt.Println(resp.Request.URL)
+
 	return response.Result()
 }
 
