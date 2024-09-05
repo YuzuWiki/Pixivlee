@@ -48,7 +48,9 @@ func (o *TCount) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-type TTimestamp time.Time
+type TTimestamp struct {
+	time.Time
+}
 
 func (t *TTimestamp) UnmarshalJSON(body []byte) error {
 	timestamp, err := strconv.ParseInt(string(body), 10, 64)
@@ -56,7 +58,7 @@ func (t *TTimestamp) UnmarshalJSON(body []byte) error {
 		return err
 	}
 
-	*t = TTimestamp(time.Unix(timestamp, 0))
+	*t = TTimestamp{time.Unix(timestamp, 0)}
 	return nil
 }
 
@@ -76,14 +78,16 @@ func (o *TJsonDict[TK, TV]) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-type TTimeDate time.Time
+type TTimeDate struct {
+	time.Time
+}
 
 func (t *TTimeDate) UnmarshalJSON(body []byte) error {
 	td, err := time.ParseInLocation(time.RFC3339, strings.ReplaceAll(string(body), "\"", ""), nil)
 	if err != nil {
 		return err
 	}
-	*t = TTimeDate(td)
+	*t = TTimeDate{td}
 	return nil
 }
 

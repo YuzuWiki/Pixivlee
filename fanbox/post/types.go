@@ -2,7 +2,6 @@ package post
 
 import (
 	"fmt"
-
 	"github.com/YuzuWiki/Pixivlee/kernel/request"
 	"github.com/YuzuWiki/Pixivlee/types"
 )
@@ -73,40 +72,44 @@ type ListDTO []ListPostDTO
 type TListIterator struct {
 	req request.IRequest
 
-	creatorId     string
-	limit         int
-	publishedDate string
+	creatorId string
+	limit     int
 }
 
 func (i *TListIterator) Next() func(yield func(idx int, items *ListDTO) bool) {
-	return func(yield func(idx int, item *ListDTO) bool) {
+	return func(yield func(page int, item *ListDTO) bool) {
 		var (
-			maxId types.TPostId = 0
-			page                = 0
+			limit                                 = i.limit + 1
+			maxId                types.TPostId    = 0
+			page                                  = 0
+			maxPublishedDatetime *types.TTimeDate = nil
 		)
 
-		url := fmt.Sprintf("/post.listCreator?creatorId=%s&limit=%d", i.creatorId, i.limit)
+		url := fmt.Sprintf("/post.listCreator?creatorId=%s&limit=%d", i.creatorId, limit)
 		for {
 			page += 1
-			response := types.TFanboxResponse[ListDTO]{}
 
+			response := types.TFanboxResponse[ListDTO]{}
 			if _, err := i.req.SetResult(&response).Get(url); err != nil {
 				break
 			}
 
 			data, err := response.Result()
-			if err != nil {
+			if err != nil || data == nil {
 				break
 			}
-
 			length := len(*data)
-			if length == 0 {
+
+			item := (*data)[:min(limit-1, length)]
+			yield(page, &item)
+
+			if length < limit {
 				break
 			}
-			yield(page, data)
 
-			maxId = (*data)[length-1].Id
-			url = fmt.Sprintf("/post.listCreator?creatorId=%s&limit=%d&maxPublishedDatetime=%s&maxId=%d", i.creatorId, i.limit, i.publishedDate, maxId)
+			maxId = (*data)[limit-1].Id
+			maxPublishedDatetime = &(*data)[limit-1].PublishedDatetime
+			url = fmt.Sprintf("/post.listCreator?creatorId=%s&maxId=%d&limit=%d&maxPublishedDatetime=%s", i.creatorId, maxId, limit, maxPublishedDatetime)
 		}
 		return
 	}

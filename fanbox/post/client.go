@@ -2,8 +2,6 @@ package post
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/YuzuWiki/Pixivlee/types"
 )
 
@@ -28,9 +26,8 @@ func (c *Client) Info(PostId types.TPostId) (*PostDTO, error) {
 func (c *Client) List(creatorId string, limit int) TListIterator {
 
 	return TListIterator{
-		req:           c.kernel.NewRequests(),
-		creatorId:     creatorId,
-		limit:         limit,
-		publishedDate: time.Now().AddDate(1, 0, 0).Format(time.DateOnly),
+		req:       c.kernel.NewRequests(),
+		creatorId: creatorId,
+		limit:     limit,
 	}
 }
