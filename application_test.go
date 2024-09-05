@@ -25,9 +25,9 @@ func Test_NewPixiv(t *testing.T) {
 		return
 	}
 
-	//data, err := app.Post.Info(6063594)
-	data, err := app.Creator.Get(13695413)
-	//data, err := app.FanBox.Creator("zhibujiloom")
+	data, err := app.Post.Info(6063594)
+	//data, err := app.Creator.Get(13695413)
+	//data, err := app.Creator.Creator("zhibujiloom")
 	if err != nil {
 		t.Error(err)
 		return

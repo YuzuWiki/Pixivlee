@@ -1,7 +1,7 @@
 package kernel
 
 import (
-	resty "github.com/go-resty/resty/v2"
+	"github.com/YuzuWiki/Pixivlee/kernel/request"
 )
 
 type HttpOption struct {
@@ -10,8 +10,8 @@ type HttpOption struct {
 	ProxyUrl  string
 	UserAgent string
 
-	OnBeforeRequest []resty.RequestMiddleware
-	OnAfterResponse []resty.ResponseMiddleware
+	OnBeforeRequest []request.RequestMiddleware
+	OnAfterResponse []request.ResponseMiddleware
 }
 
 type PixivOption struct {

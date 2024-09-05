@@ -26,9 +26,9 @@ func (c *Client) Info(PostId types.TPostId) (*PostDTO, error) {
 
 // List "https://api.fanbox.cc/post.listCreator?creatorId=zhibujiloom&maxId=4160465&limit=100&maxPublishedDatetime=2025-01-01",
 func (c *Client) List(creatorId string, limit int) TListIterator {
-	r := c.kernel.NewRequests()
+
 	return TListIterator{
-		r:             r,
+		req:           c.kernel.NewRequests(),
 		creatorId:     creatorId,
 		limit:         limit,
 		publishedDate: time.Now().AddDate(1, 0, 0).Format(time.DateOnly),

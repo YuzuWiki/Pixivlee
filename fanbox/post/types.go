@@ -3,8 +3,7 @@ package post
 import (
 	"fmt"
 
-	resty "github.com/go-resty/resty/v2"
-
+	"github.com/YuzuWiki/Pixivlee/kernel/request"
 	"github.com/YuzuWiki/Pixivlee/types"
 )
 
@@ -72,7 +71,7 @@ type ListPostDTO struct {
 type ListDTO []ListPostDTO
 
 type TListIterator struct {
-	r *resty.Request
+	req request.IRequest
 
 	creatorId     string
 	limit         int
@@ -91,7 +90,7 @@ func (i *TListIterator) Next() func(yield func(idx int, items *ListDTO) bool) {
 			page += 1
 			response := types.TFanboxResponse[ListDTO]{}
 
-			if _, err := i.r.SetResult(&response).Get(url); err != nil {
+			if _, err := i.req.SetResult(&response).Get(url); err != nil {
 				break
 			}
 

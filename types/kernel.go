@@ -5,11 +5,11 @@ import (
 	"strconv"
 	"strings"
 
-	resty "github.com/go-resty/resty/v2"
+	"github.com/YuzuWiki/Pixivlee/kernel/request"
 )
 
 type IKernel interface {
-	NewRequests() *resty.Request
+	NewRequests() request.IRequest
 }
 
 type IPixiver interface {

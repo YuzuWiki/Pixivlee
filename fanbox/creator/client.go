@@ -20,7 +20,7 @@ func (c *Client) Get(pid types.TPid) (*InfoDTO, error) {
 	}
 
 	// {CreatorName}.fanbox.cc
-	CreatorUrl := resp.RawResponse.Request.URL.Host
+	CreatorUrl := resp.RawResponse().Request.URL.Host
 	if !strings.HasSuffix(CreatorUrl, ".fanbox.cc") {
 		return nil, fmt.Errorf("not found creator")
 	}

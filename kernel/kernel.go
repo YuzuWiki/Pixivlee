@@ -4,15 +4,14 @@ import (
 	"net/http"
 	"time"
 
-	resty "github.com/go-resty/resty/v2"
-
+	"github.com/YuzuWiki/Pixivlee/kernel/request"
 	"github.com/YuzuWiki/Pixivlee/types"
 )
 
 type Kernel struct {
 	pixiver types.IPixiver
 
-	session *resty.Client
+	session request.ISession
 }
 
 func (k *Kernel) SetPixiver(pixiver types.IPixiver) {
@@ -20,7 +19,7 @@ func (k *Kernel) SetPixiver(pixiver types.IPixiver) {
 }
 
 func (k *Kernel) EnableDebug() *Kernel {
-	k.session.Debug = true
+	k.session.SetDebug(true)
 	return k
 }
 
@@ -44,17 +43,17 @@ func (k *Kernel) SetTimeOut(second int) *Kernel {
 	return k
 }
 
-func (k *Kernel) OnBeforeRequest(fn resty.RequestMiddleware) *Kernel {
+func (k *Kernel) OnBeforeRequest(fn request.RequestMiddleware) *Kernel {
 	k.session.OnBeforeRequest(fn)
 	return k
 }
 
-func (k *Kernel) OnAfterResponse(fn resty.ResponseMiddleware) *Kernel {
+func (k *Kernel) OnAfterResponse(fn request.ResponseMiddleware) *Kernel {
 	k.session.OnAfterResponse(fn)
 	return k
 }
 
-func (k *Kernel) NewRequests() *resty.Request {
+func (k *Kernel) NewRequests() request.IRequest {
 	r := k.session.NewRequest()
 
 	// set cookie
@@ -75,6 +74,6 @@ func (k *Kernel) NewRequests() *resty.Request {
 func NewKernel() *Kernel {
 	return &Kernel{
 		pixiver: nil,
-		session: resty.New(),
+		session: request.New(),
 	}
 }
