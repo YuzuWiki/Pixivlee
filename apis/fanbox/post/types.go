@@ -2,7 +2,7 @@ package post
 
 import (
 	"fmt"
-	"github.com/YuzuWiki/Pixivlee/kernel/request"
+	"github.com/YuzuWiki/Pixivlee/kernel/httpx"
 	"github.com/YuzuWiki/Pixivlee/types"
 )
 
@@ -70,7 +70,7 @@ type ListPostDTO struct {
 type ListDTO []ListPostDTO
 
 type TListIterator struct {
-	req request.IRequest
+	req httpx.IRequest
 
 	creatorId string
 	limit     int

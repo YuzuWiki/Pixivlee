@@ -1,17 +1,11 @@
-package Pixivlee
+package auth
 
 import (
 	_errors "errors"
 )
 
-// kernel exception
-var (
-	ErrKernel = _errors.New("kernel error")
-
-	ErrAuth = _errors.New("auth error")
-)
-
 // api exception
 var (
-	ErrApi = _errors.New("an error occurred in the api")
+	ErrApi  = _errors.New("an error occurred in the api")
+	ErrAuth = _errors.New("auth error")
 )

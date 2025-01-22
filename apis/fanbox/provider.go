@@ -1,10 +1,9 @@
 package fanbox
 
 import (
+	"github.com/YuzuWiki/Pixivlee/apis/fanbox/creator"
+	"github.com/YuzuWiki/Pixivlee/apis/fanbox/post"
 	"github.com/YuzuWiki/Pixivlee/types"
-
-	"github.com/YuzuWiki/Pixivlee/fanbox/creator"
-	"github.com/YuzuWiki/Pixivlee/fanbox/post"
 )
 
 type Client struct {

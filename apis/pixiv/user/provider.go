@@ -1,12 +1,11 @@
 package bookmark
 
 import (
+	"github.com/YuzuWiki/Pixivlee/apis/pixiv/user/bookmark"
+	"github.com/YuzuWiki/Pixivlee/apis/pixiv/user/following"
+	"github.com/YuzuWiki/Pixivlee/apis/pixiv/user/information"
+	"github.com/YuzuWiki/Pixivlee/apis/pixiv/user/profile"
 	"github.com/YuzuWiki/Pixivlee/types"
-
-	"github.com/YuzuWiki/Pixivlee/pixiv/user/bookmark"
-	"github.com/YuzuWiki/Pixivlee/pixiv/user/following"
-	"github.com/YuzuWiki/Pixivlee/pixiv/user/information"
-	"github.com/YuzuWiki/Pixivlee/pixiv/user/profile"
 )
 
 type Client struct {

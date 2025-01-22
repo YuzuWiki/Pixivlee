@@ -1,66 +1,35 @@
 package kernel
 
 import (
+	http2 "github.com/YuzuWiki/Pixivlee/kernel/httpx"
 	"net/http"
-	"time"
 
-	"github.com/YuzuWiki/Pixivlee/kernel/request"
 	"github.com/YuzuWiki/Pixivlee/types"
 )
 
 type Kernel struct {
-	pixiver types.IPixiver
+	account types.IAccount
 
-	session request.ISession
+	session http2.ISession
 }
 
-func (k *Kernel) SetPixiver(pixiver types.IPixiver) {
-	k.pixiver = pixiver
+func (k *Kernel) Session() http2.ISession {
+	return k.session
 }
 
-func (k *Kernel) EnableDebug() *Kernel {
-	k.session.SetDebug(true)
-	return k
+func (k *Kernel) Account() types.IAccount {
+	return k.account
 }
 
-func (k *Kernel) SetBaseURL(baseUrl string) *Kernel {
-	k.session.SetBaseURL(baseUrl)
-	return k
-}
-
-func (k *Kernel) SetProxy(proxyUrl string) *Kernel {
-	k.session.SetProxy(proxyUrl)
-	return k
-}
-
-func (k *Kernel) UnSetProxy() *Kernel {
-	k.session.RemoveProxy()
-	return k
-}
-
-func (k *Kernel) SetTimeOut(second int) *Kernel {
-	k.session.SetTimeout(time.Duration(second) * time.Second)
-	return k
-}
-
-func (k *Kernel) OnBeforeRequest(fn request.RequestMiddleware) *Kernel {
-	k.session.OnBeforeRequest(fn)
-	return k
-}
-
-func (k *Kernel) OnAfterResponse(fn request.ResponseMiddleware) *Kernel {
-	k.session.OnAfterResponse(fn)
-	return k
-}
-
-func (k *Kernel) NewRequests() request.IRequest {
+func (k *Kernel) NewRequests() http2.IRequest {
 	r := k.session.NewRequest()
-
+	// fixme: 职责划分错误
 	// set cookie
 	r.SetCookies([]*http.Cookie{
 		{
+
 			Name:   "PHPSESSID",
-			Value:  k.pixiver.SessionID(),
+			Value:  k.Account().SessionID(),
 			Path:   "/",
 			Domain: ".pixiv.net",
 		},
@@ -73,7 +42,7 @@ func (k *Kernel) NewRequests() request.IRequest {
 
 func NewKernel() *Kernel {
 	return &Kernel{
-		pixiver: nil,
-		session: request.New(),
+		account: nil,
+		session: http2.New(),
 	}
 }

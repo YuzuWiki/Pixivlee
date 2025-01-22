@@ -1,4 +1,4 @@
-package request
+package httpx
 
 import (
 	"github.com/go-resty/resty/v2"

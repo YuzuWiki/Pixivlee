@@ -1,1 +1,13 @@
 package auth
+
+const (
+	PIXIV_SESSION_ID  = "PHPSESSID"
+	FANBOX_SESSION_ID = "FANBOXSESSID"
+)
+
+const (
+	_ int8 = iota
+	BROWSE_MODE_VISITOR
+	BROWSE_MODE_PIXIV
+	BROWSE_MODE_FANBOX
+)
