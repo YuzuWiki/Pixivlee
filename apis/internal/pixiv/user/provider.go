@@ -1,10 +1,10 @@
-package bookmark
+package user
 
 import (
-	"github.com/YuzuWiki/Pixivlee/apis/pixiv/user/bookmark"
-	"github.com/YuzuWiki/Pixivlee/apis/pixiv/user/following"
-	"github.com/YuzuWiki/Pixivlee/apis/pixiv/user/information"
-	"github.com/YuzuWiki/Pixivlee/apis/pixiv/user/profile"
+	"github.com/YuzuWiki/Pixivlee/apis/internal/pixiv/user/bookmark"
+	"github.com/YuzuWiki/Pixivlee/apis/internal/pixiv/user/following"
+	"github.com/YuzuWiki/Pixivlee/apis/internal/pixiv/user/information"
+	"github.com/YuzuWiki/Pixivlee/apis/internal/pixiv/user/profile"
 	"github.com/YuzuWiki/Pixivlee/types"
 )
 

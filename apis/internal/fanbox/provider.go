@@ -1,8 +1,8 @@
 package fanbox
 
 import (
-	"github.com/YuzuWiki/Pixivlee/apis/fanbox/creator"
-	"github.com/YuzuWiki/Pixivlee/apis/fanbox/post"
+	"github.com/YuzuWiki/Pixivlee/apis/internal/fanbox/creator"
+	"github.com/YuzuWiki/Pixivlee/apis/internal/fanbox/post"
 	"github.com/YuzuWiki/Pixivlee/types"
 )
 

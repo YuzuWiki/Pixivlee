@@ -1,11 +1,11 @@
-package bookmark
+package pixiv
 
 import (
-	"github.com/YuzuWiki/Pixivlee/apis/pixiv/artwork"
-	"github.com/YuzuWiki/Pixivlee/apis/pixiv/follow_latest"
-	"github.com/YuzuWiki/Pixivlee/apis/pixiv/ranking"
-	"github.com/YuzuWiki/Pixivlee/apis/pixiv/search"
-	user "github.com/YuzuWiki/Pixivlee/apis/pixiv/user"
+	"github.com/YuzuWiki/Pixivlee/apis/internal/pixiv/artwork"
+	"github.com/YuzuWiki/Pixivlee/apis/internal/pixiv/follow_latest"
+	"github.com/YuzuWiki/Pixivlee/apis/internal/pixiv/ranking"
+	"github.com/YuzuWiki/Pixivlee/apis/internal/pixiv/search"
+	"github.com/YuzuWiki/Pixivlee/apis/internal/pixiv/user"
 	"github.com/YuzuWiki/Pixivlee/types"
 )
 

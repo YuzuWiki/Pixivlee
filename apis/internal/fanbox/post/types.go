@@ -2,6 +2,7 @@ package post
 
 import (
 	"fmt"
+
 	"github.com/YuzuWiki/Pixivlee/kernel/httpx"
 	"github.com/YuzuWiki/Pixivlee/types"
 )
