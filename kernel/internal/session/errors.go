@@ -1,4 +1,4 @@
-package auth
+package session
 
 import (
 	_errors "errors"

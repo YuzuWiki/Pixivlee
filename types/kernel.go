@@ -1,8 +1,9 @@
 package types
 
 import (
-	http2 "github.com/YuzuWiki/Pixivlee/kernel/httpx"
 	"net/http"
+
+	"github.com/YuzuWiki/Pixivlee/kernel/httpx"
 )
 
 type IAccount interface {
@@ -13,9 +14,9 @@ type IAccount interface {
 
 type IKernel interface {
 	Account() IAccount
-	Session() http2.ISession
+	Session() httpx.ISession
 
-	NewRequests() http2.IRequest
+	NewRequests() httpx.IRequest
 }
 
 type IPixiver interface {

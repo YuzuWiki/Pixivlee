@@ -1,4 +1,4 @@
-package auth
+package session
 
 const (
 	PIXIV_SESSION_ID  = "PHPSESSID"

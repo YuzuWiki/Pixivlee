@@ -1,19 +1,19 @@
 package kernel
 
 import (
-	http2 "github.com/YuzuWiki/Pixivlee/kernel/httpx"
 	"net/http"
 
+	"github.com/YuzuWiki/Pixivlee/kernel/httpx"
 	"github.com/YuzuWiki/Pixivlee/types"
 )
 
 type Kernel struct {
 	account types.IAccount
 
-	session http2.ISession
+	session httpx.ISession
 }
 
-func (k *Kernel) Session() http2.ISession {
+func (k *Kernel) Session() httpx.ISession {
 	return k.session
 }
 
@@ -21,7 +21,7 @@ func (k *Kernel) Account() types.IAccount {
 	return k.account
 }
 
-func (k *Kernel) NewRequests() http2.IRequest {
+func (k *Kernel) NewRequests() httpx.IRequest {
 	r := k.session.NewRequest()
 	// fixme: 职责划分错误
 	// set cookie
@@ -43,6 +43,6 @@ func (k *Kernel) NewRequests() http2.IRequest {
 func NewKernel() *Kernel {
 	return &Kernel{
 		account: nil,
-		session: http2.New(),
+		session: httpx.New(),
 	}
 }
