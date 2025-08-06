@@ -10,7 +10,7 @@ package Pixivlee
 //	container := kernel.NewKernel()
 //
 //	// init session
-//	if err := option.Session.Initialize(container); err != nil {
+//	if err := option.C.Initialize(container); err != nil {
 //		return nil, err
 //	}
 //

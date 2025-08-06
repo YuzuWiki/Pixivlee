@@ -1,4 +1,4 @@
-package session
+package token
 
 import (
 	"os"
@@ -7,16 +7,16 @@ import (
 	_ "github.com/YuzuWiki/Pixivlee/testdata"
 )
 
-func Test_TAuthCookie(t *testing.T) {
+func Test_New(t *testing.T) {
 	sessId, cookies := os.Getenv("PIXIV_SESSID"), os.Getenv("PIXIV_COOKIE")
 
-	a, err := Session(cookies)
+	a, err := New(cookies)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	if a.SessId() != sessId {
+	if a.SidPixiv != sessId {
 		t.Errorf("parse error (not equal)")
 		return
 	}

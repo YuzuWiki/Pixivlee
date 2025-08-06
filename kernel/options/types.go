@@ -4,6 +4,8 @@ import (
 	"github.com/YuzuWiki/Pixivlee/kernel/httpx"
 )
 
+type Middleware = func() error
+
 type HttpOption struct {
 	IsDebug  bool
 	Timeout  int

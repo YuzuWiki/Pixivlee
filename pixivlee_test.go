@@ -3,7 +3,7 @@ package Pixivlee
 //
 //func Test_NewPixiv(t *testing.T) {
 //	options := kernel.Options{
-//		Session: kernel.HttpOption{
+//		C: kernel.HttpOption{
 //			IsDebug:  false,
 //			Timeout:  10,
 //			ProxyUrl: "socks5://127.0.0.1:27005",

@@ -14,7 +14,7 @@ type IAccount interface {
 
 type IKernel interface {
 	Account() IAccount
-	Session() httpx.ISession
+	Session() httpx.IClient
 
 	NewRequests() httpx.IRequest
 }
